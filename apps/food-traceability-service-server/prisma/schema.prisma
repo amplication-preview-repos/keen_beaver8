@@ -1,0 +1,47 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model RawMaterial {
+  acquiringDate  DateTime?
+  batchNumber    String?
+  createdAt      DateTime  @default(now())
+  documentNumber String?
+  expiringDate   DateTime?
+  id             String    @id @default(cuid())
+  name           String?
+  quantity       Int?
+  supplier       Supplier? @relation(fields: [supplierId], references: [id])
+  supplierId     String?
+  unitOfMeasure  String?
+  unitPrice      Float?
+  updatedAt      DateTime  @updatedAt
+}
+
+model SemiFinishedProduct {
+  batchNumber    String?
+  createdAt      DateTime  @default(now())
+  expiringDate   DateTime?
+  id             String    @id @default(cuid())
+  ingredients    String?
+  name           String?
+  productionDate DateTime?
+  quantity       Int?
+  unitOfMeasure  String?
+  updatedAt      DateTime  @updatedAt
+}
+
+model Supplier {
+  address      String?
+  contact      String?
+  createdAt    DateTime      @default(now())
+  id           String        @id @default(cuid())
+  name         String?
+  rawMaterials RawMaterial[]
+  updatedAt    DateTime      @updatedAt
+}
